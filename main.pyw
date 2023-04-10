@@ -51,8 +51,8 @@ def labelUpdate(speed):
     speed = round(float(speed))
     counter.config(text=speed)
     
-def modKeyBindings():
-    import waitKeyBinding
+# def modKeyBindings():
+#     import waitKeyBinding
 
 # Widgets
 title = ttk.Label(titleFrame, text="Ingrese el texto debajo", font=("Arial", 16, "bold"), padding=(20))
@@ -80,8 +80,8 @@ checkboxValue = ttk.IntVar()
 checkbox = ttk.Checkbutton(options, text="Pegar y enviar", variable=checkboxValue)
 checkbox.pack()
 
-bindings = ttk.Button(options, text="Change Keybindings", bootstyle="INFO", padding=(10, 10), command=modKeyBindings)
-bindings.pack(pady="25, 0")
+# bindings = ttk.Button(options, text="Change Keybindings", bootstyle="INFO", padding=(10, 10), command=modKeyBindings)
+# bindings.pack(pady="25, 0")
 
 # Keybindings
 
