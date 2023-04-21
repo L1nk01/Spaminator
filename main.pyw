@@ -7,7 +7,7 @@ import time
 root = ttk.Window(themename="minty")
 
 root.title("Spaminator")
-root.geometry("400x365")
+root.geometry("400x300")
 root.resizable(False, False)
 root.wm_attributes("-topmost", True)
 
@@ -25,19 +25,27 @@ def spam():
     speed = round(float(slider.get()))
     global keepGoing
     keepGoing = True
+    input = entry.get() 
     
-    # Optimizar, buscar la forma de revisar si esta activado el checkbox del enter fuera del ciclo
-    while keepGoing:
-        if checkboxValue.get():
-            pag.typewrite(entry.get())
-            pag.press("enter")
-        else:
-            pag.typewrite(entry.get())
+    def checkboxSelected():
+        pag.typewrite(input)
+        pag.press("enter")
+        
+    def checkboxNotSelected():
+        pag.typewrite(input)
     
-    time.sleep(1/speed)
+    if checkboxValue.get():
+        while keepGoing:
+            checkboxSelected()
+            time.sleep(1/speed)
+    
+    else:
+        while keepGoing:    
+            checkboxNotSelected()
+            time.sleep(1/speed)
 
 def startButton():
-    global loopThread # Revisar
+    global loopThread
     loopThread = threading.Thread(target=spam)
     loopThread.start()
     start.configure(state="DISABLED")
@@ -50,9 +58,6 @@ def stopButton():
 def labelUpdate(speed):
     speed = round(float(speed))
     counter.config(text=speed)
-    
-# def modKeyBindings():
-#     import waitKeyBinding
 
 # Widgets
 title = ttk.Label(titleFrame, text="Ingrese el texto debajo", font=("Arial", 16, "bold"), padding=(20))
@@ -70,7 +75,7 @@ stop.pack(side="right", padx="20")
 sliderTitle = ttk.Label(options, text="Mensajes por segundo")
 sliderTitle.pack(pady="20, 0")
 
-slider = ttk.Scale(options, from_=1, to=10, orient="horizontal", length="250", command=labelUpdate)
+slider = ttk.Scale(options, from_=1, to=20, orient="horizontal", length="250", command=labelUpdate)
 slider.pack(pady="0, 0")
 
 counter = ttk.Label(options, text="0")
@@ -79,29 +84,5 @@ counter.pack(pady="0, 20")
 checkboxValue = ttk.IntVar()
 checkbox = ttk.Checkbutton(options, text="Pegar y enviar", variable=checkboxValue)
 checkbox.pack()
-
-# bindings = ttk.Button(options, text="Change Keybindings", bootstyle="INFO", padding=(10, 10), command=modKeyBindings)
-# bindings.pack(pady="25, 0")
-
-# Keybindings
-
-# Recuerda declarar las variables afuera
-def startKey(event):
-    if event.keysym == "F1":
-        global loopThread
-        loopThread = threading.Thread(target=spam)
-        loopThread.start()
-        start.configure(state="DISABLED")
-
-
-def stopKey(event):
-    if event.keysym == "F2":
-        global keepGoing
-        keepGoing = False
-        start.configure(state="NORMAL")
-
-root.bind("<F1>", startKey)  # Start keybind
-
-root.bind("<F2>", stopKey)  # Stop keybind
 
 root.mainloop()
